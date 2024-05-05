@@ -29,9 +29,9 @@ XCTAssertEqual(3, paragraphs.count) // Passes!
 
 // Search for tags inside tags
 let footerParagraphs = parsed.find(.p, in: [.footer])
-XCTAssertEqual(1, footerParagraphs.count)
+XCTAssertEqual(1, footerParagraphs.count) // Passes!
 
 // Search by attribute
 let firstParagraph = parsed.find(attributes: ["class": .contains("one")])
-XCTAssertEqual(1, firstParagraph.count)
+XCTAssertEqual(1, firstParagraph.count) // Passes!
 ```
