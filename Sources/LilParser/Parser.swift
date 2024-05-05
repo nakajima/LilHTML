@@ -10,13 +10,12 @@ import LilTidy
 
 public struct Parser {
 	var html: String
-//	var delegate: ParserDelegate
 
 	public init(html: String) {
 		self.html = html
 	}
 
-	public func parse() throws -> Result<ElementNode, any Error>? {
+	public func parse() throws -> Result<ElementNode, any Error> {
 		let cleaned = try LilTidy.clean(html, options: [
 			"add-xml-space": "yes",
 			"output-html": "no",
@@ -35,6 +34,10 @@ public struct Parser {
 		xmlparser.delegate = delegate
 		xmlparser.parse()
 
-		return delegate.result
+		guard let result = delegate.result else {
+			return .failure(ParserDelegate.ParseError.didNotGetResult)
+		}
+
+		return result
 	}
 }

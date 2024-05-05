@@ -86,16 +86,20 @@ public class ElementNode: Node {
 		return result
 	}
 
-	public func find(_ tagNames: TagName...) -> [ElementNode] {
-		find(tagNames)
+	public func find(_ tagNames: TagName..., in parent: [TagName] = []) -> [ElementNode] {
+		return if parent.isEmpty {
+			find(tagNames)
+		} else {
+			find(parent).flatMap { $0.find(tagNames) }
+		}
 	}
 
-	public func find(attributes: [String: String]) -> [ElementNode] {
+	public func find(attributes: [String: AttributeValue]) -> [ElementNode] {
 		var result: [ElementNode] = []
 
 		for childNode in childElements {
 			if attributes.allSatisfy({ (name, value) in
-				childNode[name] == value
+				value.matches(value: childNode[name])
 			}) {
 				result.append(childNode)
 			}

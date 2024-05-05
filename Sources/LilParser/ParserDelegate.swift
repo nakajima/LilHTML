@@ -13,8 +13,8 @@ class ParserDelegate: NSObject, XMLParserDelegate {
 	public var error: (any Error)?
 	public var result: Result<ElementNode, any Error>?
 
-	enum ParseError: Error {
-		case didNotGetRootElement
+	public enum ParseError: Error {
+		case didNotGetRootElement, didNotGetResult
 	}
 
 	func parser(_: XMLParser, didStartElement elementName: String, namespaceURI _: String?, qualifiedName _: String?, attributes: [String: String] = [:]) {
