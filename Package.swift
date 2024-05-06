@@ -14,15 +14,9 @@ let package = Package(
 			targets: ["LilParser"]
 		),
 	],
-	dependencies: [
-		.package(url: "https://github.com/nakajima/LilTidy.swift", branch: "main"),
-	],
 	targets: [
 		.target(
 			name: "LilParser",
-			dependencies: [
-				.product(name: "LilTidy", package: "LilTidy.swift"),
-			],
       swiftSettings: [
 				.enableUpcomingFeature("StrictConcurrency"),
 				.enableUpcomingFeature("ExistentialAny"),
