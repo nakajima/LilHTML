@@ -7,14 +7,12 @@
 
 import Foundation
 
-public struct Selector {
-	public struct Segment: ExpressibleBySelectorSegment {
+public struct Selector: Codable {
+	public struct Segment: Codable {
 		public var tagName: TagName?
 		public var containsText: String?
 		public var children: [Segment] = []
 		public var attributes: [String: String] = [:]
-		public var nextSibling: (any ExpressibleBySelectorSegment)?
-		public var selectorSegment: Selector.Segment { self }
 
 		public subscript(class className: String) -> Segment {
 			var segment = self
@@ -77,11 +75,15 @@ public struct Selector {
 	public var segments: [Segment]
 }
 
+extension Selector.Segment: ExpressibleBySelectorSegment {
+	public var selectorSegment: Selector.Segment { self }
+}
+
 public protocol ExpressibleBySelector {
 	var selector: Selector { get }
 }
 
-public protocol ExpressibleBySelectorSegment {
+public protocol ExpressibleBySelectorSegment: Codable {
 	var selectorSegment: Selector.Segment { get }
 }
 

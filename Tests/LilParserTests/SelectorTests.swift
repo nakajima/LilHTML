@@ -9,7 +9,7 @@ import Foundation
 import LilHTML
 import XCTest
 
-class CSSSelectorTests: XCTestCase {
+class SelectorTests: XCTestCase {
 	func testBasic() throws {
 		let html = """
 		<html>
