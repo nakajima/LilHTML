@@ -5,19 +5,19 @@ import Foundation
 import PackageDescription
 
 let package = Package(
-	name: "LilParser",
+	name: "LilHTML",
 	platforms: [.macOS(.v14), .iOS(.v17)],
 	products: [
 		// Products define the executables and libraries a package produces, making them visible to other packages.
 		.library(
-			name: "LilParser",
-			targets: ["LilParser"]
+			name: "LilHTML",
+			targets: ["LilHTML"]
 		),
 	],
 	targets: [
 		.target(
-			name: "LilParser",
-      swiftSettings: [
+			name: "LilHTML",
+			swiftSettings: [
 				.enableUpcomingFeature("StrictConcurrency"),
 				.enableUpcomingFeature("ExistentialAny"),
 				.unsafeFlags([
@@ -27,7 +27,7 @@ let package = Package(
 		),
 		.testTarget(
 			name: "LilParserTests",
-			dependencies: ["LilParser"],
+			dependencies: ["LilHTML"],
 			resources: [
 				.process("Resources/basic.html"),
 				.process("Resources/list.html"),

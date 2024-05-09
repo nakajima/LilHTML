@@ -98,13 +98,54 @@ public class ElementNode: Node {
 		var result: [ElementNode] = []
 
 		for childNode in childElements {
-			if attributes.allSatisfy({ (name, value) in
+			if attributes.allSatisfy({ name, value in
 				value.matches(value: childNode[name])
 			}) {
 				result.append(childNode)
 			}
 
 			result.append(contentsOf: childNode.find(attributes: attributes))
+		}
+
+		return result
+	}
+
+	public func search(_ segments: (any ExpressibleBySelectorSegment)...) -> [ElementNode] {
+		guard var current = segments.first else {
+			return []
+		}
+
+		var flattened: [Selector.Segment] = [current.selectorSegment]
+
+		while let next = current.selectorSegment.children.first {
+			flattened.insert(next, at: 0)
+			current = next
+		}
+
+		return search(flattened)
+	}
+
+	func search(_ segments: [any ExpressibleBySelectorSegment]) -> [ElementNode] {
+		var result: [ElementNode] = []
+		var segments = segments
+		var currentSegment: (any ExpressibleBySelectorSegment)? = segments.popLast()
+
+		if currentSegment == nil {
+			return []
+		}
+
+		while let current = currentSegment, !childNodes.isEmpty {
+			for childNode in childElements {
+				if current.selectorSegment.matches(childNode) {
+					if segments.isEmpty {
+						result.append(childNode)
+					}
+				}
+
+				result.append(contentsOf: childNode.search(segments))
+
+				currentSegment = segments.popLast()
+			}
 		}
 
 		return result

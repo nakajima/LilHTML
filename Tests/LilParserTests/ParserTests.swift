@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import LilParser
+import LilHTML
 import XCTest
 
 class ParserTests: XCTestCase {
@@ -15,7 +15,7 @@ class ParserTests: XCTestCase {
 	}
 
 	func testBasicUsage() throws {
-		let parser = Parser(html: """
+		let parser = HTML(html: """
 		<div>
 			<div class="container">
 				<h1>Hi it's lil tidy</h1>
@@ -51,13 +51,13 @@ class ParserTests: XCTestCase {
 
 		measure {
 			for _ in 0 ..< 1000 {
-				_ = try! Parser(html: html).parse().get()
+				_ = try! HTML(html: html).parse().get()
 			}
 		}
 	}
 
 	func testBasic() throws {
-		let parsed = try Parser(html: html("basic")).parse().get()
+		let parsed = try HTML(html: html("basic")).parse().get()
 		XCTAssertEqual(6, parsed.find(.p).count)
 		XCTAssertEqual(9, parsed.find(.p, .strong).count)
 

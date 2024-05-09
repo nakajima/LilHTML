@@ -43,7 +43,6 @@ class ParserDelegate: NSObject, XMLParserDelegate {
 
 	func parser(_: XMLParser, parseErrorOccurred parseError: any Error) {
 		error = parseError
-		
 	}
 
 	func parserDidEndDocument(_: XMLParser) {

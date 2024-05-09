@@ -1,5 +1,5 @@
 //
-//  Parser.swift
+//  HTML.swift
 //
 //
 //  Created by Pat Nakajima on 5/2/24.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Parser {
+public struct HTML {
 	var html: String
 
 	public init(html: String) {
@@ -19,6 +19,10 @@ public struct Parser {
 		let xmlparser = XMLParser(data: Data(html.utf8))
 		xmlparser.delegate = delegate
 		xmlparser.parse()
+
+		if let error = delegate.error {
+			return .failure(error)
+		}
 
 		guard let result = delegate.result else {
 			return .failure(ParserDelegate.ParseError.didNotGetResult)
