@@ -8,15 +8,19 @@
 import Foundation
 
 public struct HTML {
-	var html: String
+	var html: Data
 
 	public init(html: String) {
+		self.html = Data(html.utf8)
+	}
+
+	public init(html: Data) {
 		self.html = html
 	}
 
 	public func parse() throws -> Result<ElementNode, any Error> {
 		let delegate = ParserDelegate()
-		let xmlparser = XMLParser(data: Data(html.utf8))
+		let xmlparser = XMLParser(data: html)
 		xmlparser.delegate = delegate
 		xmlparser.parse()
 
