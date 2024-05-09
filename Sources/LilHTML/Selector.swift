@@ -108,6 +108,7 @@ extension TagName: ExpressibleBySelectorSegment {
 }
 
 public extension ExpressibleBySelectorSegment where Self == Selector.Segment {
+	static var any: Selector.Segment { .init() }
 	static var custom: Selector.Segment { .init(tagName: .custom) }
 	static var mediaStream: Selector.Segment { .init(tagName: .mediaStream) }
 	static var a: Selector.Segment { .init(tagName: .a) }
