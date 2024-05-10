@@ -11,8 +11,8 @@ import XCTest
 
 class SelectorTests: XCTestCase {
 	func testDSL() throws {
-		let result: [Selectar.Segment] = .div / .strong / .a[class: "sup"]
-		let expected: [Selectar.Segment] = [.div, .strong, .a[class: "sup"]]
+		let result: Selectar = .div / .strong / .a[class: "sup"]
+		let expected: Selectar = [.div, .strong, .a[class: "sup"]]
 		XCTAssertEqual(expected, result)
 	}
 

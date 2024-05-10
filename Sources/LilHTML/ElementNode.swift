@@ -110,11 +110,11 @@ public class ElementNode: Node {
 		return result
 	}
 
-	public func search(_ segments: Selectar.Segment...) -> [ElementNode] {
+	public func search(_ segments: SelectarSegment...) -> [ElementNode] {
 		search(segments)
 	}
 
-	public func search(node: ElementNode, segments: [Selectar.Segment]) -> [ElementNode] {
+	public func search(node: ElementNode, segments: [SelectarSegment]) -> [ElementNode] {
 		var result: [ElementNode] = []
 		var segments = segments
 		let originalSegments = segments
@@ -143,7 +143,7 @@ public class ElementNode: Node {
 		return result
 	}
 
-	public func search(_ segments: [Selectar.Segment]) -> [ElementNode] {
+	public func search(_ segments: [SelectarSegment]) -> [ElementNode] {
 		let segments = Array(segments.reversed())
 		return search(node: self, segments: segments)
 	}
