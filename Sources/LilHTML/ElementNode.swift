@@ -110,45 +110,42 @@ public class ElementNode: Node {
 		return result
 	}
 
-	public func search(_ segments: (any ExpressibleBySelectorSegment)...) -> [ElementNode] {
-		guard var current = segments.first else {
-			return []
-		}
-
-		var flattened: [Selector.Segment] = [current.selectorSegment]
-
-		while let next = current.selectorSegment.children.first {
-			flattened.insert(next, at: 0)
-			current = next
-		}
-
-		return search(flattened)
+	public func search(_ segments: Selectar.Segment...) -> [ElementNode] {
+		search(segments)
 	}
 
-	func search(_ segments: [any ExpressibleBySelectorSegment]) -> [ElementNode] {
+	public func search(node: ElementNode, segments: [Selectar.Segment]) -> [ElementNode] {
 		var result: [ElementNode] = []
 		var segments = segments
-		var currentSegment: (any ExpressibleBySelectorSegment)? = segments.popLast()
+		let originalSegments = segments
 
-		if currentSegment == nil {
+		guard let segment = segments.popLast() else {
 			return []
 		}
 
-		while let current = currentSegment, !childNodes.isEmpty {
-			for childNode in childElements {
-				if current.selectorSegment.matches(childNode) {
-					if segments.isEmpty {
-						result.append(childNode)
-					}
+		if segment.matches(node) {
+			// We've got a match, let's see if we keep matching...
+			if segments.isEmpty {
+				// We're done, we can add it to the result
+				result.append(node)
+			} else {
+				// We have more to match
+				for child in node.childElements {
+					result.append(contentsOf: search(node: child, segments: segments))
 				}
-
-				result.append(contentsOf: childNode.search(segments))
-
-				currentSegment = segments.popLast()
+			}
+		} else {
+			for child in node.childElements {
+				result.append(contentsOf: search(node: child, segments: originalSegments))
 			}
 		}
 
 		return result
+	}
+
+	public func search(_ segments: [Selectar.Segment]) -> [ElementNode] {
+		let segments = Array(segments.reversed())
+		return search(node: self, segments: segments)
 	}
 
 	public func find(_ tagNames: [TagName]) -> [ElementNode] {
