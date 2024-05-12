@@ -143,7 +143,7 @@ public extension Element {
 	}
 }
 
-extension Element where ElementType == ImmutableElementNode {
+public extension Element where ElementType == ImmutableElementNode {
 	var firstChild: (any ImmutableNode)? {
 		(childNodes as! [any ImmutableNode]).first
 	}
@@ -153,7 +153,7 @@ extension Element where ElementType == ImmutableElementNode {
 	}
 }
 
-extension Element where ElementType == MutableElementNode {
+public extension Element where ElementType == MutableElementNode {
 	var firstChild: (any MutableNode)? {
 		(childNodes as! [any MutableNode]).first
 	}
