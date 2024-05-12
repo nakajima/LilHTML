@@ -57,30 +57,6 @@ public extension Node {
 		}
 	}
 
-	var nextSibling: (any Node)? {
-		guard let parent else {
-			return nil
-		}
-
-		if position + 1 < parent.childNodes.count {
-			return parent.childNodes[position + 1]
-		} else {
-			return nil
-		}
-	}
-
-	var prevSibling: (any Node)? {
-		guard let parent else {
-			return nil
-		}
-
-		if position - 1 >= 0 {
-			return parent.childNodes[position - 1]
-		} else {
-			return nil
-		}
-	}
-
 	var nextElementSibling: ElementType? {
 		guard let parent else {
 			return nil
@@ -112,5 +88,57 @@ public extension Node {
 		}
 
 		return false
+	}
+}
+
+public extension Node where Self: MutableNode {
+	var nextSibling: (any MutableNode)? {
+		guard let parent else {
+			return nil
+		}
+
+		if position + 1 < parent.childNodes.count {
+			return parent.childNodes[position + 1] as? any MutableNode
+		} else {
+			return nil
+		}
+	}
+
+	var prevSibling: (any MutableNode)? {
+		guard let parent else {
+			return nil
+		}
+
+		if position - 1 >= 0 {
+			return parent.childNodes[position - 1] as? any MutableNode
+		} else {
+			return nil
+		}
+	}
+}
+
+public extension Node where Self: ImmutableNode {
+	var nextSibling: (any ImmutableNode)? {
+		guard let parent else {
+			return nil
+		}
+
+		if position + 1 < parent.childNodes.count {
+			return parent.childNodes[position + 1] as? any ImmutableNode
+		} else {
+			return nil
+		}
+	}
+
+	var prevSibling: (any ImmutableNode)? {
+		guard let parent else {
+			return nil
+		}
+
+		if position - 1 >= 0 {
+			return parent.childNodes[position - 1] as? any ImmutableNode
+		} else {
+			return nil
+		}
 	}
 }
