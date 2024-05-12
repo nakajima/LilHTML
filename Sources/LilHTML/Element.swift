@@ -24,14 +24,6 @@ public extension Element {
 		childNodes.map(\.textContent).joined()
 	}
 
-	var firstChild: (any Node)? {
-		childNodes.first
-	}
-
-	var lastChild: (any Node)? {
-		childNodes.last
-	}
-
 	var firstElementChild: Self? {
 		for childNode in childNodes {
 			if let childElement = childNode as? Self {
@@ -148,5 +140,25 @@ public extension Element {
 		}
 
 		return result
+	}
+}
+
+extension Element where ElementType == ImmutableElementNode {
+	var firstChild: (any ImmutableNode)? {
+		(childNodes as! [any ImmutableNode]).first
+	}
+
+	var lastChild: (any ImmutableNode)? {
+		(childNodes as! [any ImmutableNode]).last
+	}
+}
+
+extension Element where ElementType == MutableElementNode {
+	var firstChild: (any MutableNode)? {
+		(childNodes as! [any MutableNode]).first
+	}
+
+	var lastChild: (any MutableNode)? {
+		(childNodes as! [any MutableNode]).last
 	}
 }
