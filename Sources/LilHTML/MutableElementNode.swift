@@ -76,13 +76,13 @@ public final class MutableElementNode: Hashable, Decodable, MutableNode, Element
 		)
 	}
 
-	func replace(with replacement: any MutableNode) {
+	public func replace<Replacement: MutableNode>(with replacement: Replacement) {
 		if let parent {
 			parent.childNodes[position] = replacement.remove()
 		}
 	}
 
-	@discardableResult func remove() -> Self {
+	@discardableResult public func remove() -> Self {
 		if let parent {
 			parent.removeChild(self)
 		}

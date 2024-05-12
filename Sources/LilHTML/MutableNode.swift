@@ -10,6 +10,9 @@ import Foundation
 public protocol MutableNode: AnyObject, Node where ElementType == MutableElementNode {
 	var parent: ElementType? { get set }
 	var position: Int { get set }
+
+	func replace<Replacement: MutableNode>(with: Replacement)
+	func remove() -> Self
 }
 
 public enum MutableNodeType: Codable {

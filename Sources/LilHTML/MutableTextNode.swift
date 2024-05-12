@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class MutableTextNode: MutableNode, Hashable, Codable {
+public final class MutableTextNode: MutableNode, Hashable, Codable {
 	public var position: Int = -1
 	public weak var parent: MutableElementNode? = nil
 	public var textContent: String
@@ -32,6 +32,20 @@ public class MutableTextNode: MutableNode, Hashable, Codable {
 
 	public func copy() -> MutableTextNode {
 		MutableTextNode(textContent: textContent)
+	}
+
+	public func remove() -> MutableTextNode {
+		if let parent {
+			parent.removeChild(self)
+		}
+
+		return self
+	}
+
+	public func replace<Replacement: MutableNode>(with replacement: Replacement) {
+		if let parent {
+			parent.childNodes[position] = replacement.remove()
+		}
 	}
 
 	public func immutableCopy() -> ImmutableTextNode {
