@@ -7,10 +7,19 @@
 
 import Foundation
 
-public class TextNode: Node {
+public class TextNode: Node, Hashable, Codable {
 	public var position: Int = -1
-	public weak var parent: ElementNode?
+	public weak var parent: ElementNode? = nil
 	public var textContent: String
+
+	enum CodingKeys: CodingKey {
+		case position, textContent
+	}
+
+	public func hash(into hasher: inout Hasher) {
+		hasher.combine(position)
+		hasher.combine(textContent)
+	}
 
 	public init(parent: ElementNode?, textContent: String) {
 		self.parent = parent

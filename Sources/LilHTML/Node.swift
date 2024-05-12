@@ -7,14 +7,29 @@
 
 import Foundation
 
-public protocol Node: AnyObject, Equatable, CustomDebugStringConvertible {
+public protocol Node: AnyObject, Hashable, Codable, Equatable, CustomDebugStringConvertible {
 	var position: Int { get set }
 	var parent: ElementNode? { get set }
 	var textContent: String { get }
 	func same(as: any Node) -> Bool
 }
 
+public enum NodeType: Codable {
+	case element(ElementNode), text(TextNode)
+}
+
 public extension Node {
+	var type: NodeType? {
+		switch self {
+		case let elem as ElementNode:
+			.element(elem)
+		case let text as TextNode:
+			.text(text)
+		default:
+			nil
+		}
+	}
+
 	var toHTML: String {
 		switch self {
 		case let elem as ElementNode:

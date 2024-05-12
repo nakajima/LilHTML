@@ -46,6 +46,28 @@ class ParserTests: XCTestCase {
 		XCTAssertEqual(1, firstParagraph.count)
 	}
 
+	func testCodable() throws {
+		let parsed = try HTML(html: """
+		<div>
+			<div class="container">
+				<h1>Hi it's lil tidy</h1>
+				<article>
+					<p class="one two">hello</p>
+					<p>world</p>
+				</article>
+				<footer>
+					<p>it's the footer</p>
+				</footer>
+			</div>
+		</div>
+		""").parse().get()
+
+		let dumped = try JSONEncoder().encode(parsed)
+		let loaded = try JSONDecoder().decode(ElementNode.self, from: dumped)
+		print(String(data: dumped, encoding: .utf8)!)
+		XCTAssertEqual(parsed, loaded)
+	}
+
 	func testParsePerformance() {
 		let html = html("basic")
 

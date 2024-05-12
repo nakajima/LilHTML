@@ -7,16 +7,49 @@
 
 import Foundation
 
-public class ElementNode: Node {
+public final class ElementNode: Hashable, Decodable, Node {
 	public var tagName: TagName
 	public var attributes: [String: String] = [:]
 	public var childNodes: [any Node] = []
 	public weak var parent: ElementNode?
 	public var position: Int = -1
 
-	public var metadata: [String: Any] = [:]
+	public func hash(into hasher: inout Hasher) {
+		hasher.combine(tagName)
+		hasher.combine(attributes)
+		hasher.combine(childNodes.map(\.hashValue))
+		hasher.combine(position)
+	}
 
-	private var childNodesByTagName: [String: [any Node]] = [:]
+	enum CodingKeys: CodingKey {
+		case tagName, attributes, childNodes, position
+	}
+
+	public init(from decoder: any Decoder) throws {
+		let container = try decoder.container(keyedBy: CodingKeys.self)
+
+		tagName = try container.decode(TagName.self, forKey: .tagName)
+		attributes = try container.decode([String: String].self, forKey: .attributes)
+		position = try container.decode(Int.self, forKey: .position)
+		
+		let childNodesWithType = try container.decode([NodeType?].self, forKey: .childNodes)
+		let childNodes: [any Node] = childNodesWithType.compactMap { child in
+			switch child {
+			case let .element(elem):
+				return elem
+			case let .text(text):
+				return text
+			default:
+				return nil
+			}
+		}
+
+		self.childNodes = childNodes
+
+		for node in childNodes {
+			node.parent = self
+		}
+	}
 
 	public init(_ tagName: TagName) {
 		self.tagName = tagName
@@ -198,5 +231,17 @@ public class ElementNode: Node {
 		for (newPosition, child) in childNodes.enumerated() {
 			child.position = newPosition
 		}
+	}
+}
+
+extension ElementNode: Encodable {
+	public func encode(to encoder: any Encoder) throws {
+		var container = encoder.container(keyedBy: CodingKeys.self)
+		try container.encode(tagName, forKey: .tagName)
+		try container.encode(attributes, forKey: .attributes)
+		try container.encode(position, forKey: .position)
+
+		let typedChildNodes = childNodes.map(\.type)
+		try container.encode(typedChildNodes, forKey: .childNodes)
 	}
 }
