@@ -1,5 +1,5 @@
 //
-//  CSS.swift
+//  Selectar.swift
 //
 //
 //  Created by Pat Nakajima on 5/9/24.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-public typealias Selectar = Array<SelectarSegment>
+public typealias Selectar = [SelectarSegment]
 
 public struct SelectarSegment: Codable, Equatable, CustomDebugStringConvertible {
 	public static func == (lhs: SelectarSegment, rhs: SelectarSegment) -> Bool {
@@ -18,7 +18,7 @@ public struct SelectarSegment: Codable, Equatable, CustomDebugStringConvertible 
 	public var containsText: String?
 	public var attributes: [String: String] = [:]
 
-	public init(tagName: TagName? = nil, containsText: String? = nil, attributes: [String : String] = [:]) {
+	public init(tagName: TagName? = nil, containsText: String? = nil, attributes: [String: String] = [:]) {
 		self.tagName = tagName
 		self.containsText = containsText
 		self.attributes = attributes
@@ -38,19 +38,17 @@ public struct SelectarSegment: Codable, Equatable, CustomDebugStringConvertible 
 
 	func matches(_ node: any Node) -> Bool {
 		return switch node {
-		case let node as ElementNode:
+		case let node as MutableElementNode:
 			matches(element: node)
-		case _ as TextNode:
+		case _ as MutableTextNode:
 			false
 		default:
 			false
 		}
 	}
 
-	func matches(element: ElementNode) -> Bool {
-		if element.is(.article) {
-
-		}
+	func matches(element: MutableElementNode) -> Bool {
+		if element.is(.article) {}
 
 		if let tagName, tagName != element.tagName {
 			return false
@@ -70,7 +68,7 @@ public struct SelectarSegment: Codable, Equatable, CustomDebugStringConvertible 
 			var contains = false
 
 			for node in element.childNodes {
-				guard let textNode = node as? TextNode else {
+				guard let textNode = node as? MutableTextNode else {
 					continue
 				}
 
@@ -104,7 +102,7 @@ public protocol ExpressibleBySelectorSegment: Codable {
 
 public extension ExpressibleBySelectorSegment {
 	static func / (lhs: Self, rhs: any ExpressibleBySelectorSegment) -> [SelectarSegment] {
-		if let lhs = lhs as? Array<SelectarSegment> {
+		if let lhs = lhs as? [SelectarSegment] {
 			var result = lhs
 			result.append(rhs.selectorSegment)
 			return result
@@ -118,7 +116,6 @@ extension Array: ExpressibleBySelector where Element == SelectarSegment {
 	public var selector: Selectar {
 		Selectar(self)
 	}
-	
 
 	public static func / (lhs: Self, rhs: SelectarSegment) -> [SelectarSegment] {
 		var result = lhs
@@ -134,7 +131,7 @@ extension TagName: ExpressibleBySelectorSegment {
 }
 
 public extension ExpressibleBySelectorSegment where Self == SelectarSegment {
-	static var `any`: SelectarSegment { .init() }
+	static var any: SelectarSegment { .init() }
 	static var custom: SelectarSegment { .init(tagName: .custom) }
 	static var mediaStream: SelectarSegment { .init(tagName: .mediaStream) }
 	static var a: SelectarSegment { .init(tagName: .a) }
@@ -269,7 +266,7 @@ public extension ExpressibleBySelectorSegment where Self == SelectarSegment {
 	static var tt: SelectarSegment { .init(tagName: .tt) }
 	static var u: SelectarSegment { .init(tagName: .u) }
 	static var ul: SelectarSegment { .init(tagName: .ul) }
-	static var `var`: SelectarSegment { .init(tagName: .`var`) }
+	static var `var`: SelectarSegment { .init(tagName: .var) }
 	static var video: SelectarSegment { .init(tagName: .video) }
 	static var wbr: SelectarSegment { .init(tagName: .wbr) }
 	static var xmp: SelectarSegment { .init(tagName: .xmp) }

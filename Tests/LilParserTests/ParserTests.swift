@@ -63,9 +63,32 @@ class ParserTests: XCTestCase {
 		""").parse().get()
 
 		let dumped = try JSONEncoder().encode(parsed)
-		let loaded = try JSONDecoder().decode(ElementNode.self, from: dumped)
+		let loaded = try JSONDecoder().decode(MutableElementNode.self, from: dumped)
 		print(String(data: dumped, encoding: .utf8)!)
 		XCTAssertEqual(parsed, loaded)
+	}
+
+	func testImmutable() throws {
+		let parsed = try HTML(html: """
+		<div>
+			<div class="container">
+				<h1>Hi it's lil tidy</h1>
+				<article>
+					<p class="one two">hello</p>
+					<p>world</p>
+				</article>
+				<footer>
+					<p>it's the footer</p>
+				</footer>
+			</div>
+		</div>
+		""").parse().get()
+
+		let immutable = parsed.immutableCopy()
+		let immutableDump = try JSONEncoder().encode(parsed.immutableCopy())
+		let mutable = try JSONDecoder().decode(MutableElementNode.self, from: immutableDump)
+		print(immutable.debugDescription)
+		XCTAssert(mutable.same(as: parsed))
 	}
 
 	func testParsePerformance() {

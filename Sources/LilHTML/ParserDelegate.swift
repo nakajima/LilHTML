@@ -8,17 +8,17 @@
 import Foundation
 
 class ParserDelegate: NSObject, XMLParserDelegate {
-	public var rootNode: ElementNode?
-	public var currentNode: ElementNode?
+	public var rootNode: MutableElementNode?
+	public var currentNode: MutableElementNode?
 	public var error: (any Error)?
-	public var result: Result<ElementNode, any Error>?
+	public var result: Result<MutableElementNode, any Error>?
 
 	public enum ParseError: Error {
 		case didNotGetRootElement, didNotGetResult
 	}
 
 	func parser(_: XMLParser, didStartElement elementName: String, namespaceURI _: String?, qualifiedName _: String?, attributes: [String: String] = [:]) {
-		let node = ElementNode(tagName: TagName(rawValue: elementName.uppercased()) ?? .custom)
+		let node = MutableElementNode(tagName: TagName(rawValue: elementName.uppercased()) ?? .custom)
 		node.attributes = attributes
 
 		if let currentNode {
@@ -36,7 +36,7 @@ class ParserDelegate: NSObject, XMLParserDelegate {
 
 	func parser(_: XMLParser, foundCharacters: String) {
 		if let currentNode {
-			let textNode = TextNode(textContent: foundCharacters)
+			let textNode = MutableTextNode(textContent: foundCharacters)
 			currentNode.appendChild(textNode)
 		}
 	}

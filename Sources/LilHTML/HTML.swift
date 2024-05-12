@@ -18,7 +18,7 @@ public struct HTML {
 		self.html = html
 	}
 
-	public func parse() throws -> Result<ElementNode, any Error> {
+	public func parse() throws -> Result<MutableElementNode, any Error> {
 		let delegate = ParserDelegate()
 		let xmlparser = XMLParser(data: html)
 		xmlparser.delegate = delegate

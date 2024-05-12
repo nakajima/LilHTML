@@ -7,32 +7,19 @@
 
 import Foundation
 
-public protocol Node: AnyObject, Hashable, Codable, Equatable, CustomDebugStringConvertible {
-	var position: Int { get set }
-	var parent: ElementNode? { get set }
+public protocol Node: Hashable, Codable, Equatable, CustomDebugStringConvertible {
+	associatedtype ElementType: Element
+
+	var position: Int { get }
+	var parent: ElementType? { get }
 	var textContent: String { get }
 	func same(as: any Node) -> Bool
 }
 
-public enum NodeType: Codable {
-	case element(ElementNode), text(TextNode)
-}
-
 public extension Node {
-	var type: NodeType? {
-		switch self {
-		case let elem as ElementNode:
-			.element(elem)
-		case let text as TextNode:
-			.text(text)
-		default:
-			nil
-		}
-	}
-
 	var toHTML: String {
 		switch self {
-		case let elem as ElementNode:
+		case let elem as ElementType:
 			var parts = ["<\(elem.tagName.lowercased())"]
 
 			if !elem.attributes.isEmpty {
@@ -52,7 +39,7 @@ public extension Node {
 
 			parts.append("</\(elem.tagName.lowercased())>")
 			return parts.joined(separator: "")
-		case let text as TextNode:
+		case let text as MutableTextNode:
 			return text.textContent
 		default:
 			return ""
@@ -61,9 +48,9 @@ public extension Node {
 
 	var innerHTML: String {
 		return switch self {
-		case let elem as ElementNode:
+		case let elem as ElementType:
 			elem.childNodes.map(\.toHTML).joined()
-		case let text as TextNode:
+		case let text as MutableTextNode:
 			text.textContent
 		default:
 			""
@@ -94,13 +81,13 @@ public extension Node {
 		}
 	}
 
-	var nextElementSibling: ElementNode? {
+	var nextElementSibling: ElementType? {
 		guard let parent else {
 			return nil
 		}
 
 		for childNode in parent.childNodes where childNode.position > position {
-			if let result = childNode as? ElementNode {
+			if let result = childNode as? ElementType {
 				return result
 			}
 		}
@@ -108,26 +95,12 @@ public extension Node {
 		return nil
 	}
 
-	func replace(with replacement: any Node) {
-		if let parent {
-			parent.childNodes[position] = replacement.remove()
-		}
-	}
-
-	@discardableResult func remove() -> Self {
-		if let parent {
-			parent.removeChild(self)
-		}
-
-		return self
-	}
-
 	func `is`(_ tagNames: TagName...) -> Bool {
 		self.is(tagNames)
 	}
 
 	func `is`(_ tagNames: [TagName]) -> Bool {
-		guard let elem = self as? ElementNode else {
+		guard let elem = self as? any Element else {
 			return false
 		}
 

@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum TagName: String, Hashable, Codable, CustomStringConvertible {
+public enum TagName: String, Hashable, Codable, Sendable, CustomStringConvertible {
 	public var description: String { rawValue }
 
 	func lowercased() -> String {
