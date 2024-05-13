@@ -85,10 +85,19 @@ class ParserTests: XCTestCase {
 		""").parse().get()
 
 		let immutable = parsed.immutableCopy()
+		
 		let immutableDump = try JSONEncoder().encode(parsed.immutableCopy())
 		let mutable = try JSONDecoder().decode(MutableElementNode.self, from: immutableDump)
 		print(immutable.debugDescription)
 		XCTAssert(mutable.same(as: parsed))
+	}
+
+	func testImmutableMusicRadar() throws {
+		let text = html("musicradar")
+		let html = try HTML(html: text).parse().get().immutableCopy()
+
+		let links = html.search(.a[class: "article-link"])
+		XCTAssertEqual(33, links.count)
 	}
 
 	func testParsePerformance() {

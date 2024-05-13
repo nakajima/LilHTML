@@ -15,9 +15,9 @@ public extension Node {
 	private func generateDebugDescription(level: Int) -> String {
 		let indent = Array(repeating: "  ", count: level).joined() + "\(position):"
 		switch self {
-		case let text as MutableTextNode:
+		case let text as any TextNode:
 			return "\(indent) text \(text.textContent.debugDescription)"
-		case let elem as MutableElementNode:
+		case let elem as any Element:
 			var parts: [String] = [indent, elem.tagName.rawValue]
 
 			if !elem.attributes.isEmpty {

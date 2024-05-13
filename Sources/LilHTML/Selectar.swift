@@ -38,16 +38,14 @@ public struct SelectarSegment: Codable, Equatable, CustomDebugStringConvertible 
 
 	func matches(_ node: any Node) -> Bool {
 		return switch node {
-		case let node as MutableElementNode:
+		case let node as any Element:
 			matches(element: node)
-		case _ as MutableTextNode:
-			false
 		default:
 			false
 		}
 	}
 
-	func matches(element: MutableElementNode) -> Bool {
+	func matches<ElementType: Element>(element: ElementType) -> Bool {
 		if element.is(.article) {}
 
 		if let tagName, tagName != element.tagName {
@@ -68,7 +66,7 @@ public struct SelectarSegment: Codable, Equatable, CustomDebugStringConvertible 
 			var contains = false
 
 			for node in element.childNodes {
-				guard let textNode = node as? MutableTextNode else {
+				guard let textNode = node as? any TextNode else {
 					continue
 				}
 

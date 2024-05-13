@@ -30,6 +30,7 @@ let package = Package(
 			dependencies: ["LilHTML"],
 			resources: [
 				.process("Resources/basic.html"),
+				.process("Resources/musicradar.html"),
 			]
 		),
 	]
