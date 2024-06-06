@@ -6,6 +6,9 @@
 //
 
 import Foundation
+#if canImport(FoundationXML)
+import FoundationXML
+#endif
 
 public struct HTML {
 	var html: Data
