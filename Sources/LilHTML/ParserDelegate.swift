@@ -7,6 +7,10 @@
 
 import Foundation
 
+#if os(Linux)
+import FoundationXML
+#endif
+
 class ParserDelegate: NSObject, XMLParserDelegate {
 	public var rootNode: MutableElementNode?
 	public var currentNode: MutableElementNode?
