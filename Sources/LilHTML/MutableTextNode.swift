@@ -7,7 +7,7 @@
 
 import Foundation
 
-public final class MutableTextNode: MutableNode, Hashable, Codable {
+public final class MutableTextNode: MutableNode, TextNode, Hashable, Codable {
 	public var position: Int = -1
 	public weak var parent: MutableElementNode? = nil
 	public var textContent: String

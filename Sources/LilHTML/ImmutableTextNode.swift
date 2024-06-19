@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct ImmutableTextNode: Hashable, Codable, ImmutableNode {
+public struct ImmutableTextNode: Hashable, Codable, ImmutableNode, TextNode {
 	public var parent: ImmutableElementNode?
 	public var textContent: String
 	public var position: Int

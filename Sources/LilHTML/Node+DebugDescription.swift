@@ -32,7 +32,7 @@ public extension Node {
 
 			return parts.joined(separator: " ")
 		default:
-			return ""
+			return "\(type(of: self))"
 		}
 	}
 }

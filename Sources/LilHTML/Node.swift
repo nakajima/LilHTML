@@ -17,7 +17,7 @@ public protocol Node: Hashable, Codable, Equatable, CustomDebugStringConvertible
 }
 
 public extension Node {
-	var toHTML: String {
+	func toHTML(includeWhitespace: Bool = false) -> String {
 		switch self {
 		case let elem as ElementType:
 			var parts = ["<\(elem.tagName.lowercased())"]
@@ -34,13 +34,17 @@ public extension Node {
 			parts.append(">")
 
 			for child in elem.childNodes {
-				parts.append(child.toHTML)
+				parts.append(child.toHTML(includeWhitespace: includeWhitespace))
 			}
 
 			parts.append("</\(elem.tagName.lowercased())>")
 			return parts.joined(separator: "")
-		case let text as MutableTextNode:
-			return text.textContent
+		case let text as any TextNode:
+			if text.textContent.trimmingCharacters(in: .whitespacesAndNewlines) != "" || includeWhitespace {
+				return text.textContent
+			} else {
+				return ""
+			}
 		default:
 			return ""
 		}
@@ -49,7 +53,7 @@ public extension Node {
 	var innerHTML: String {
 		return switch self {
 		case let elem as ElementType:
-			elem.childNodes.map(\.toHTML).joined()
+			elem.childNodes.map({ $0.toHTML() }).joined()
 		case let text as MutableTextNode:
 			text.textContent
 		default:

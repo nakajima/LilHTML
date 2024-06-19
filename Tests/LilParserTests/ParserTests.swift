@@ -64,8 +64,8 @@ class ParserTests: XCTestCase {
 
 		let dumped = try JSONEncoder().encode(parsed)
 		let loaded = try JSONDecoder().decode(MutableElementNode.self, from: dumped)
-		print(String(data: dumped, encoding: .utf8)!)
-		XCTAssertEqual(parsed, loaded)
+
+		XCTAssertEqual(parsed.toHTML(), loaded.toHTML())
 	}
 
 	func testImmutable() throws {
@@ -85,11 +85,14 @@ class ParserTests: XCTestCase {
 		""").parse().get()
 
 		let immutable = parsed.immutableCopy()
-		
-		let immutableDump = try JSONEncoder().encode(parsed.immutableCopy())
+
+		XCTAssertEqual(parsed.toHTML(), immutable.toHTML())
+
+		let immutableDump = try JSONEncoder().encode(immutable)
 		let mutable = try JSONDecoder().decode(MutableElementNode.self, from: immutableDump)
-		print(immutable.debugDescription)
-		XCTAssert(mutable.same(as: parsed))
+
+		// Make sure we can round trip to immutable then back
+		XCTAssertEqual(mutable.toHTML(), parsed.toHTML())
 	}
 
 	func testImmutableMusicRadar() throws {
