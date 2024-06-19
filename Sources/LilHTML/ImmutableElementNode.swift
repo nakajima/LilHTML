@@ -27,7 +27,7 @@ public struct ImmutableElementNode: ImmutableNode, Element, @unchecked Sendable 
 	public init(
 		tagName: TagName,
 		attributes: [String: String] = [:],
-		childNodes: [any Node],
+		childNodes: [any ImmutableNode],
 		parent: ImmutableElementNode?,
 		position: Int
 	) {
@@ -60,35 +60,28 @@ public struct ImmutableElementNode: ImmutableNode, Element, @unchecked Sendable 
 		self.attributes = node.attributes
 		self.position = node.position
 		self.childNodes = node.childNodes
-//
-//		self.tagName = try container.decode(TagName.self, forKey: .tagName)
-//		self.attributes = try container.decode([String: String].self, forKey: .attributes)
-//		self.position = try container.decode(Int.self, forKey: .position)
-//
-//		let childNodesWithType = try container.decode([ImmutableNodeType?].self, forKey: .childNodes)
-//		let childNodes: [any ImmutableNode] = childNodesWithType.compactMap { child in
-//			switch child {
-//			case let .element(elem):
-//				return elem
-//			case let .text(text):
-//				return text
-//			default:
-//				return nil
-//			}
-//		}
-//
-//		self._parent = .wrapped(nil)
-//
-//		self.childNodes = childNodes.map { node in
-//			switch node {
-//			case let node as ImmutableElementNode:
-//				node.with(parent: self)
-//			case let node as ImmutableTextNode:
-//				node.with(parent: self)
-//			default:
-//				node
-//			}
-//		}
+	}
+
+	public func mutableCopy(shallow: Bool = true) -> MutableElementNode {
+		let node = MutableElementNode(
+			tagName: tagName
+		)
+
+		node.parent = parent?.mutableCopy()
+		node.attributes = attributes
+		node.position = position
+		node.childNodes = childNodes.compactMap { node in
+			switch node {
+			case let elem as ImmutableElementNode:
+				return elem.mutableCopy()
+			case let text as ImmutableTextNode:
+				return text.mutableCopy()
+			default:
+				return nil
+			}
+		}
+
+		return node
 	}
 
 	public func with(parent: ElementType) -> ImmutableElementNode {

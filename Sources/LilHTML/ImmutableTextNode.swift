@@ -33,4 +33,11 @@ public struct ImmutableTextNode: Hashable, Codable, ImmutableNode, TextNode {
 		copy.parent = parent
 		return copy
 	}
+
+	public func mutableCopy(shallow: Bool = false) -> MutableTextNode {
+		let parent = parent?.mutableCopy(shallow: true) as? MutableElementNode
+		let node: MutableTextNode = MutableTextNode(parent: parent, textContent: textContent)
+		node.position = position
+		return node
+	}
 }

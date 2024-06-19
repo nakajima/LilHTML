@@ -33,36 +33,10 @@ public final class MutableElementNode: Hashable, Decodable, MutableNode, Element
 		self.attributes = node.attributes
 		self.position = node.position
 		self.childNodes = node.childNodes
-//
-//		let container = try decoder.container(keyedBy: CodingKeys.self)
-//
-//		self.tagName = try container.decode(TagName.self, forKey: .tagName)
-//		self.attributes = try container.decode([String: String].self, forKey: .attributes)
-//		self.position = try container.decode(Int.self, forKey: .position)
-//
-//		let childNodesWithType = try container.decode([MutableNodeType?].self, forKey: .childNodes)
-//		let childNodes: [any MutableNode] = childNodesWithType.compactMap { child in
-//			switch child {
-//			case let .element(elem):
-//				print(elem.debugDescription)
-//				return elem
-//			case let .text(text):
-//				print(text.debugDescription)
-//				return text
-//			default:
-//				return nil
-//			}
-//		}
-//
-//		for node in childNodes {
-//			node.parent = self
-//		}
-//
-//		self.childNodes = childNodes
 	}
 
 	public func immutableCopy(shallow: Bool = false) -> ImmutableElementNode {
-		let children: [any Node] = shallow ? [] : childNodes.compactMap { node in
+		let children: [any ImmutableNode] = shallow ? [] : childNodes.compactMap { node in
 			switch node {
 			case let elem as MutableElementNode:
 				return elem.immutableCopy()
@@ -158,15 +132,5 @@ extension MutableElementNode: Encodable {
 	public func encode(to encoder: any Encoder) throws {
 		var container = encoder.singleValueContainer()
 		try container.encode(toHTML())
-
-//		var container = encoder.container(keyedBy: CodingKeys.self)
-//		try container.encode(tagName, forKey: .tagName)
-//		try container.encode(attributes, forKey: .attributes)
-//		try container.encode(position, forKey: .position)
-//
-//		print("encoding to container \(self)")
-//
-//		let typedChildNodes = (childNodes as! [any MutableNode]).map(\.type)
-//		try container.encode(typedChildNodes, forKey: .childNodes)
 	}
 }

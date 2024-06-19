@@ -95,6 +95,27 @@ class ParserTests: XCTestCase {
 		XCTAssertEqual(mutable.toHTML(), parsed.toHTML())
 	}
 
+	func testImmutableToMutable() throws {
+		let parsed = try HTML(html: """
+		<div>
+			<div class="container">
+				<h1>Hi it's lil tidy</h1>
+				<article>
+					<p class="one two">hello</p>
+					<p>world</p>
+				</article>
+				<footer>
+					<p>it's the footer</p>
+				</footer>
+			</div>
+		</div>
+		""").parse().get()
+
+		let immutable = parsed.immutableCopy()
+		let mutable = immutable.mutableCopy()
+		XCTAssert(mutable.same(as: parsed))
+	}
+
 	func testImmutableMusicRadar() throws {
 		let text = html("musicradar")
 		let html = try HTML(html: text).parse().get().immutableCopy()
