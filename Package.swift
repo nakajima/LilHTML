@@ -23,6 +23,9 @@ let package = Package(
 				.unsafeFlags([
 					"-enable-bare-slash-regex",
 				]),
+			],
+			linkerSettings: [
+				.linkedLibrary("libxml2")
 			]
 		),
 		.testTarget(
