@@ -1,6 +1,10 @@
-# Lil Parser
+# LilHTML
 
 It's lil html parser with ample opportunities for optimization.
+
+It uses libxml2 to parse an HTML string into a pure Swift tree, rather than just wrapping a libxml2 tree.
+
+When you call `Parser.parse` with some HTML, you get back a mutable tree consisting of `MutableElementNode`s and `MutableTextNode`s. These are reference types that let you manipulate the tree. If you want value semantics you can call `immutableCopy()` on the tree to get it as structs.
 
 ## Usage
 
