@@ -1,0 +1,13 @@
+//
+//  module.map.modulemap
+//  
+//
+//  Created by Pat Nakajima on 6/19/24.
+//
+
+module libxml2 [system] {
+		link "xml2"
+		umbrella header "libxml2-lilhtml.h"
+		export *
+		module * { export * }
+}

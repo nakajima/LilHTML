@@ -4,6 +4,18 @@
 import Foundation
 import PackageDescription
 
+#if os(Linux)
+let dependencies: [Target.Dependency] = ["libxml2"]
+let pkgConfig = "libxml-2.0"
+let provider: [SystemPackageProvider] = [
+		.apt(["libxml2-dev"])
+]
+#else
+let dependencies: [Target.Dependency] = []
+let pkgConfig: String? = nil
+let provider: [SystemPackageProvider] = []
+#endif
+
 let package = Package(
 	name: "LilHTML",
 	platforms: [.macOS(.v14), .iOS(.v17)],
@@ -15,6 +27,11 @@ let package = Package(
 		),
 	],
 	targets: [
+		.systemLibrary(
+			name: "libxml2",
+			pkgConfig: pkgConfig,
+			providers: provider
+		),
 		.target(
 			name: "LilHTML",
 			swiftSettings: [
@@ -23,9 +40,6 @@ let package = Package(
 				.unsafeFlags([
 					"-enable-bare-slash-regex",
 				]),
-			],
-			linkerSettings: [
-				.linkedLibrary("libxml2")
 			]
 		),
 		.testTarget(
