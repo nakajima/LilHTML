@@ -41,7 +41,7 @@ public extension Node {
 			return parts.joined(separator: "")
 		case let text as any TextNode:
 			if text.textContent.trimmingCharacters(in: .whitespacesAndNewlines) != "" || includeWhitespace {
-				return HTML.escape(text.textContent)
+				return text.textContent
 			} else {
 				return ""
 			}

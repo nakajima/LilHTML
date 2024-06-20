@@ -96,7 +96,10 @@ public final class MutableElementNode: Hashable, Decodable, MutableNode, Element
 	}
 
 	public func removeChild(_ node: any MutableNode) {
-		childNodes.remove(at: node.position)
+		if childNodes.indices.contains(node.position) {
+			childNodes.remove(at: node.position)
+		}
+
 		node.position = -1
 		setPositions()
 	}

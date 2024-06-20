@@ -14,6 +14,10 @@ public enum TagName: String, Hashable, Codable, Sendable, CustomStringConvertibl
 		description.lowercased()
 	}
 
+	static func from(_ string: String) -> TagName {
+		.init(rawValue: string.uppercased()) ?? .custom
+	}
+
 	case custom = "CUSTOM"
 	case mediaStream = "MEDIASTREAM"
 	case a = "A"
