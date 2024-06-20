@@ -34,6 +34,7 @@ let package = Package(
 		),
 		.target(
 			name: "LilHTML",
+			dependencies: dependencies,
 			swiftSettings: [
 				.enableUpcomingFeature("StrictConcurrency"),
 				.enableUpcomingFeature("ExistentialAny"),
