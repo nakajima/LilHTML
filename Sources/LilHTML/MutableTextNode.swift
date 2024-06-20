@@ -49,6 +49,10 @@ public final class MutableTextNode: MutableNode, TextNode, Hashable, Codable {
 	}
 
 	public func immutableCopy() -> ImmutableTextNode {
-		ImmutableTextNode(parent: parent?.immutableCopy(shallow: true), textContent: textContent, position: position)
+		ImmutableTextNode(
+			parent: parent?.immutableCopy(shallow: true),
+			textContent: textContent,
+			position: position
+		)
 	}
 }

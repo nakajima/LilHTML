@@ -8,7 +8,7 @@
 import Foundation
 
 public typealias Selectar = [SelectarSegment]
-extension Selectar: Sendable { }
+extension Selectar: Sendable {}
 
 public struct SelectarSegment: Sendable, Codable, Equatable, CustomDebugStringConvertible {
 	public static func == (lhs: SelectarSegment, rhs: SelectarSegment) -> Bool {

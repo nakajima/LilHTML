@@ -62,7 +62,7 @@ public struct ImmutableElementNode: ImmutableNode, Element, @unchecked Sendable 
 		self.childNodes = node.childNodes
 	}
 
-	public func mutableCopy(shallow: Bool = true) -> MutableElementNode {
+	public func mutableCopy(shallow _: Bool = true) -> MutableElementNode {
 		let node = MutableElementNode(
 			tagName: tagName
 		)

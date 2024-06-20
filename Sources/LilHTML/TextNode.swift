@@ -1,6 +1,6 @@
 //
-//  File.swift
-//  
+//  TextNode.swift
+//
 //
 //  Created by Pat Nakajima on 5/13/24.
 //

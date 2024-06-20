@@ -7,7 +7,7 @@
 
 import Foundation
 #if canImport(FoundationXML)
-import FoundationXML
+	import FoundationXML
 #endif
 
 class ParserDelegate: NSObject, XMLParserDelegate {

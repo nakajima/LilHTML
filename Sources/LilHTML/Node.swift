@@ -41,7 +41,7 @@ public extension Node {
 			return parts.joined(separator: "")
 		case let text as any TextNode:
 			if text.textContent.trimmingCharacters(in: .whitespacesAndNewlines) != "" || includeWhitespace {
-				return text.textContent
+				return HTML.escape(text.textContent)
 			} else {
 				return ""
 			}
@@ -53,7 +53,7 @@ public extension Node {
 	var innerHTML: String {
 		return switch self {
 		case let elem as ElementType:
-			elem.childNodes.map({ $0.toHTML() }).joined()
+			elem.childNodes.map { $0.toHTML() }.joined()
 		case let text as MutableTextNode:
 			text.textContent
 		default:
